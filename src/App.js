@@ -23,11 +23,29 @@ class TodoList extends React.Component {
 }
 
 class TodoForm extends React.Component {
+	constructor() {
+		super();
+		this.state = {
+			input: ''
+		};
+	}
+	handleSubmit = (e) => {
+		e.preventDefault();
+		this.props.handleAdd(this.state.input);
+	};
+
+	handleChange = (e) => {
+		this.setState({
+			...this.state,
+			input: e.target.value
+		});
+	};
+
 	render() {
 		return (
 			<form>
-				<input />
-				<button>Add</button>
+				<input onChange={this.handleChange} />
+				<button onClick={this.handleSubmit}>Add</button>
 			</form>
 		);
 	}
@@ -64,14 +82,47 @@ class App extends React.Component {
 			]
 		};
 	}
+
+	handleAdd = (task) => {
+		//1. set state
+		//2. change todos
+		//3. make a copy todos
+		//4. add a new todo to the end of our todo list
+
+		const newTodo = {
+			task: task,
+			id: Date.now(),
+			completed: false
+		};
+
+		this.setState({
+			...this.state,
+			todos: [...this.state.todos, newTodo]
+		});
+	};
+
+	handleClear = () => {
+		//1. set state
+		//2. loop through all of the todos
+		//3. remove all todos that have been completed === true
+		//4. save filtered todos to state
+
+		this.setState({
+			...this.state,
+			todos: this.state.todos.filter((todo) => {
+				return todo.completed === false;
+			})
+		});
+	};
+
 	render() {
 		const { todos } = this.state;
 		return (
 			<div>
 				<h1>Todo List: MVP</h1>
 				<TodoList todos={todos} />
-				<TodoForm />
-				<button>Clear</button>
+				<TodoForm handleAdd={this.handleAdd} />
+				<button onClick={this.handleClear}>Clear</button>
 			</div>
 		);
 	}
