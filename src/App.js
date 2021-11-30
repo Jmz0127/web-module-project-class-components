@@ -1,9 +1,13 @@
 import React from 'react';
 
 class Todo extends React.Component {
+	handleClick = () => {
+		this.props.handleToggle(this.props.todo.id);
+	};
+
 	render() {
 		return (
-			<li>
+			<li onClick={this.handleClick}>
 				{this.props.todo.task} {this.props.todo.completed ? <span>- completed</span> : <span></span>}
 			</li>
 		);
@@ -15,7 +19,7 @@ class TodoList extends React.Component {
 		return (
 			<ul>
 				{this.props.todos.map((todo) => {
-					return <Todo todo={todo} />;
+					return <Todo key={todo.id} handleToggle={this.props.handleToggle} todo={todo} />;
 				})}
 			</ul>
 		);
@@ -114,13 +118,33 @@ class App extends React.Component {
 			})
 		});
 	};
+	handleToggle = (clickedId) => {
+		//1. setState
+		//2. change to todos
+		//3. find the todo that we clicked on
+		//4. flip the value of completed for that todo
+		//5. keep all other todos the same
+
+		this.setState({
+			...this.state,
+			todos: this.state.todos.map((todo) => {
+				if (todo.id === clickedId) {
+					return {
+						...todo,
+						completed: !todo.completed
+					};
+				}
+				return todo;
+			})
+		});
+	};
 
 	render() {
 		const { todos } = this.state;
 		return (
 			<div>
 				<h1>Todo List: MVP</h1>
-				<TodoList todos={todos} />
+				<TodoList handleToggle={this.handleToggle} todos={todos} />
 				<TodoForm handleAdd={this.handleAdd} />
 				<button onClick={this.handleClear}>Clear</button>
 			</div>
