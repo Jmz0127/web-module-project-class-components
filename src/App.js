@@ -1,5 +1,38 @@
 import React from 'react';
 
+class Todo extends React.Component {
+	render() {
+		return (
+			<li>
+				{this.props.todo.task} {this.props.todo.completed ? <span>- completed</span> : <span></span>}
+			</li>
+		);
+	}
+}
+
+class TodoList extends React.Component {
+	render() {
+		return (
+			<ul>
+				{this.props.todos.map((todo) => {
+					return <Todo todo={todo} />;
+				})}
+			</ul>
+		);
+	}
+}
+
+class TodoForm extends React.Component {
+	render() {
+		return (
+			<form>
+				<input />
+				<button>Add</button>
+			</form>
+		);
+	}
+}
+
 class App extends React.Component {
 	// you will need a place to store your state in this component.
 	// design `App` to be the parent component of your application.
@@ -36,20 +69,8 @@ class App extends React.Component {
 		return (
 			<div>
 				<h1>Todo List: MVP</h1>
-				<ul>
-					{todos.map((todo) => {
-						return (
-							<li>
-								{todo.task} {todo.completed ? <span>- completed</span> : <span></span>}
-							</li>
-						);
-					})}
-				</ul>
-
-				<form>
-					<input />
-					<button>Add</button>
-				</form>
+				<TodoList todos={todos} />
+				<TodoForm />
 				<button>Clear</button>
 			</div>
 		);
